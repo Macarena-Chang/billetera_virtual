@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.com.ada.api.billeteravirtual.entities.Usuario;
 import ar.com.ada.api.billeteravirtual.models.request.LoginRequest;
 import ar.com.ada.api.billeteravirtual.models.request.RegistrationRequest;
 import ar.com.ada.api.billeteravirtual.models.response.JwtResponse;
@@ -36,15 +37,46 @@ public class AuthController {
     @PostMapping("auth/register")
     public ResponseEntity<RegistrationResponse> postRegisterUser(@RequestBody RegistrationRequest req) {
         RegistrationResponse r = new RegistrationResponse();
-        // aca creamos la persona y el usuario a traves del service.
-        //Insertar codigo aqui
-        //usuarioService.crearUsuario(parametros de req);
+        //creamos usuario
+        //usuarioService.crearUsuario devuelve un usuario entonces se lo asignamos a variable tipo Usuario.
+        Usuario usuario = usuarioService.crearUsuario(req.fullName, req.country, req.identificationType, req.identification, req.birthDate, req.email, req.password);
         r.isOk = true;
         r.message = "Te registraste con exitoooo!!!!!!!";
-        r.userId = 0; // <-- AQUI ponemos el numerito de id para darle a front!
+        r.userId = usuario.getUsuarioId(); // <-- AQUI ponemos el numerito de id para darle a front!
         return ResponseEntity.ok(r);
 
     }
+
+    /*
+
+      public Usuario crearUsuario(String nombre, int pais, int tipoDocumentoId, String documento, Date fechaNacimiento, String email, String password){
+        return null;
+    }
+
+
+
+
+    ATRIBUTOS DE RegistrationResponse
+    public String fullName; //Nombre persona
+    public int country; //pais del usuario
+    public int identificationType; //Tipo Documento
+    public String identification; //nro documento
+    public Date birthDate; //fechaNacimiento
+    public String email; //email
+    public String password; //contraseña elegida por el usuario.
+     */
+
+    /*
+    ATRIBUTOS DE USUARIO:
+	
+    private Integer usuarioId;
+    private String username;
+    private String password;
+    private String email;
+    private Date fechaLogin;
+    private Persona persona;
+    
+    */
 
     @PostMapping("auth/login") // probando nuestro login
     public ResponseEntity<?> createAuthenticationToken(@RequestBody LoginRequest authenticationRequest)
