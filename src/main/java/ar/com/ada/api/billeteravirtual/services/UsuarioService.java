@@ -1,13 +1,17 @@
 package ar.com.ada.api.billeteravirtual.services;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.com.ada.api.billeteravirtual.entities.Billetera;
+import ar.com.ada.api.billeteravirtual.entities.Cuenta;
 import ar.com.ada.api.billeteravirtual.entities.Persona;
 import ar.com.ada.api.billeteravirtual.entities.Usuario;
 import ar.com.ada.api.billeteravirtual.repos.UsuarioRepository;
+import ar.com.ada.api.billeteravirtual.security.Crypto;
 
 @Service
 public class UsuarioService {
@@ -17,6 +21,12 @@ public class UsuarioService {
 
     @Autowired
     PersonaService personaService;
+
+    @Autowired
+    BilleteraService billeteraService;
+
+
+
 
 	public Usuario buscarPorUsername(String username) {
 		return null;
@@ -42,15 +52,41 @@ public class UsuarioService {
         Usuario usuario = new Usuario();
 
         usuario.setEmail(email);
-        usuario.setPassword(password);
+        usuario.setPassword(Crypto.encrypt(password, email));
         usuario.setUsername(email);
       
         // la relacion bidireccional  esta escrita en persona.setUsuario
         persona.setUsuario(usuario);
 
         personaService.grabar(persona);
+        
+       // 1.3-->Crear una billetera(setearle una persona)
+      
+        Billetera billetera  = new Billetera();
+
+
+        // 1.4-->Crear una cuenta en pesos y otra en dolares*v
+        Cuenta cuentaARS = new Cuenta(); 
+        cuentaARS.setSaldo(new BigDecimal(0));
+        cuentaARS.setMoneda("ARS");
+
+        billetera.agregarCuenta(cuentaARS);
+
+        Cuenta cuentaUSD = new Cuenta();
+        cuentaUSD.setSaldo(new BigDecimal(0));
+        cuentaUSD.setMoneda("USD");
+
+        billetera.agregarCuenta(cuentaUSD);
+
+        //setearle la billetera a la perrsona
+        persona.setBilletera(billetera);
+
+        billeteraService.grabar(billetera);
+        
+
         return usuario;
     }
+
 
 
 

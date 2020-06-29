@@ -1,9 +1,20 @@
 package ar.com.ada.api.billeteravirtual.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import ar.com.ada.api.billeteravirtual.entities.Billetera;
+import ar.com.ada.api.billeteravirtual.repos.BilleteraRepository;
 
 @Service
 public class BilleteraService {
+
+    @Autowired
+    BilleteraRepository billeteraRepo; 
+
+    public void grabar(Billetera billetera){
+        billeteraRepo.save(billetera);
+    }
     
     /* 1.Metodo: Cargar saldo
     1.1-- Recibir un importe, se busca una billetera por id,
@@ -21,4 +32,7 @@ public class BilleteraService {
     /* 3. Metodo: consultar saldo 
     3.1-- recibir el id de la billetera y la moneda en la que esta la cuenta
     */
+
+ 
+    
 }
