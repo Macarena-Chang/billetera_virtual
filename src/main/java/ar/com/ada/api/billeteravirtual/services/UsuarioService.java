@@ -77,13 +77,17 @@ public class UsuarioService {
         cuentaUSD.setMoneda("USD");
 
         billetera.agregarCuenta(cuentaUSD);
+		 billetera.agregarCuenta(cuentaARS);
 
         //setearle la billetera a la perrsona
         persona.setBilletera(billetera);
 
         billeteraService.grabar(billetera);
-        
+        BigDecimal saldoRegalo500ARS = new BigDecimal(500);
 
+        billeteraService.cargarSaldo(saldoRegalo500ARS,"ARS", billetera.getBilleteraId(), "Regalo", "Bienvenida por creacion de usuario" );
+        
+        int lala;
         return usuario;
     }
 
