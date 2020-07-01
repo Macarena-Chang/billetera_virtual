@@ -70,6 +70,7 @@ public class BilleteraService {
     3.1-- recibir el id de la billetera y la moneda en la que esta la cuenta
     */
     public BigDecimal consultarSaldo (Integer billeteraId, String moneda){
+
         Billetera billetera = billeteraRepo.findByBilleteraId(billeteraId);
 
         Cuenta cuenta = billetera.getCuenta(moneda);

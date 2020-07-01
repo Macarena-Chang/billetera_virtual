@@ -47,17 +47,18 @@ public class BilleteraController {
             }
     */
     //parametros: id de la billetera, moneda.
-    @GetMapping("/billetera/{id}/saldos")
-    public ResponseEntity <?> consultarSaldo(@PathVariable Integer id, String moneda){
+    @GetMapping("/billeteras/{id}/saldos/{moneda}")
+    public ResponseEntity<?> consultarSaldo(@PathVariable Integer id, @PathVariable String moneda) {
 
-        SaldoResponse saldoResponse = new SaldoResponse();        
+        SaldoResponse saldo = new SaldoResponse();
 
-        saldoResponse.saldo = billeteraService.consultarSaldo(id,moneda);
-        saldoResponse.moneda = moneda;
+        saldo.saldo = billeteraService.consultarSaldo(id, moneda);
+        saldo.moneda = moneda;
 
-        return ResponseEntity.ok(saldoResponse);
+        return ResponseEntity.ok(saldo);
     }
-    //poner metodo consultarSaldo en BilleteraService
+
+    
 
     @GetMapping("/billeteras/{id}/saldos")
     public ResponseEntity<List <SaldoResponse>> consultarSaldo(@PathVariable Integer id){
